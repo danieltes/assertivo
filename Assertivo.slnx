@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Assertivo/Assertivo.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Assertivo.Tests/Assertivo.Tests.csproj" />
+  </Folder>
+</Solution>
