@@ -155,3 +155,14 @@ dotnet run --project tests/Assertivo.Benchmarks --configuration Release
 ```
 
 Results are written to `BenchmarkDotNet.Artifacts/results/`. The happy-path `Should().Be()` benchmark measures zero heap allocation at ~0.18 ns per call.
+
+## Packaging
+
+Shared NuGet packaging configuration lives in [`Directory.Build.props`](Directory.Build.props) at the repository root. All projects inherit these defaults.
+
+- **Non-packable by default** — only projects with `<IsPackable>true</IsPackable>` produce packages.
+- **Opt in** — add `<IsPackable>true</IsPackable>` to a project's `.csproj` to enable packaging.
+- **Override metadata** — set any packaging property (e.g. `<Description>`) in the project's `.csproj` to replace the shared default.
+- **Build packages** — run `dotnet pack -c Release` at the solution root.
+
+See [`specs/00002-nuget-packaging/quickstart.md`](specs/00002-nuget-packaging/quickstart.md) for the full packaging guide.
