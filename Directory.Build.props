@@ -1,0 +1,39 @@
+<Project>
+
+  <!--
+    Shared NuGet Packaging Configuration
+    =====================================
+    This file defines repository-wide packaging defaults inherited by all projects.
+
+    HOW PACKAGING WORKS:
+    - All projects are NON-PACKABLE by default (IsPackable=false).
+    - To make a project produce a NuGet package, add <IsPackable>true</IsPackable>
+      to the project's .csproj file. That is the only required change.
+    - All metadata below (Version, Authors, Description, etc.) is inherited
+      automatically. Override any property in the project's .csproj if needed.
+
+    WHERE TO FIND THINGS:
+    - Shared metadata: This file (Directory.Build.props)
+    - Opt-in to packaging: <IsPackable>true</IsPackable> in project .csproj
+    - Per-project overrides: <PropertyGroup> in project .csproj
+    - Packaging guide: specs/00002-nuget-packaging/quickstart.md
+
+    CURRENTLY PACKABLE PROJECTS:
+    - src/Assertivo (IsPackable=true in Assertivo.csproj)
+  -->
+
+  <PropertyGroup Label="Packaging Defaults">
+    <!-- Global default: no project produces a NuGet package unless it explicitly opts in -->
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package Metadata">
+    <Version>0.1.0</Version>
+    <Authors>Daniel Eduardo Testa</Authors>
+    <Description>A high-performance, fluent assertion library for .NET</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/danieltes/assertivo</RepositoryUrl>
+    <PackageTags>testing assertions fluent dotnet</PackageTags>
+  </PropertyGroup>
+
+</Project>
