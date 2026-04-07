@@ -131,21 +131,14 @@ jobs:
             sed -i "s|<FileVersion>[^<]*</FileVersion>|<FileVersion>${ASSEMBLY_VERSION}</FileVersion>|g"                 "$FILE"
           done
 
-          git add -A
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: bump version to ${VERSION} [skip ci]"
-            echo "Committed version bump to ${VERSION}"
-          else
-            echo "::warning::No version properties found in project files; nothing committed."
-          fi
+          echo "Version properties updated (not committed to branch)."
 
       - name: Create and push tag
         env:
           NEW_TAG: ${{ steps.version.outputs.new_tag }}
-          BRANCH: ${{ github.ref_name }}
         run: |
           git tag "$NEW_TAG"
-          git push origin "HEAD:refs/heads/${BRANCH}" "$NEW_TAG"
+          git push origin "$NEW_TAG"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
