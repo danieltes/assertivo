@@ -160,6 +160,8 @@ jobs:
   build-and-pack:
     needs: create-tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       package_name: ${{ steps.pack.outputs.package_name }}
 
