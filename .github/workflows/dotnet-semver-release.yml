@@ -131,7 +131,15 @@ jobs:
             sed -i "s|<FileVersion>[^<]*</FileVersion>|<FileVersion>${ASSEMBLY_VERSION}</FileVersion>|g"                 "$FILE"
           done
 
-          echo "Version properties updated (not committed to branch)."
+          echo "Version properties updated."
+
+      - name: Commit version bump
+        env:
+          NEW_TAG: ${{ steps.version.outputs.new_tag }}
+        run: |
+          git add Directory.Build.props
+          git commit -m "chore: bump version to ${NEW_TAG}"
+          git push origin HEAD
 
       - name: Create and push tag
         env:
