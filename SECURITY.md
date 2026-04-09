@@ -2,11 +2,11 @@
 
 ## Supported Versions
 
-| Version | Supported |
-| ------- | --------- |
-| 0.1.2   | ✅        |
+Security fixes are generally provided only for the last minor version. Security fixes are released either as part of the next minor version or as an on-demand patch version.
 
-Older versions do not receive security fixes. Please upgrade to the latest published release on [NuGet](https://www.nuget.org/packages/Assertivo).
+Security fixes are given priority and might be enough to cause a new version to be released.
+
+Please upgrade to the latest published release on [NuGet](https://www.nuget.org/packages/Assertivo).
 
 ## Reporting a Vulnerability
 
@@ -18,7 +18,7 @@ Use GitHub's private disclosure feature instead:
 2. Click **"Report a vulnerability"**.
 3. Fill in the details (description, reproduction steps, affected versions, potential impact).
 
-You will receive an acknowledgement within **5 business days**. We aim to triage and produce a fix within **30 days** of a confirmed report, coordinating a public disclosure (CVE if applicable) only after a patched release is available.
+We will try to acknowledge within **10 business days**. We aim to triage and produce a fix within **30 days** of a confirmed report, coordinating a public disclosure (CVE if applicable) only after a patched release is available.
 
 ## Out of Scope
 
