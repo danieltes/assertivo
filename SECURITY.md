@@ -4,7 +4,7 @@
 
 | Version | Supported |
 | ------- | --------- |
-| 0.1.1   | ✅        |
+| 0.1.2   | ✅        |
 
 Older versions do not receive security fixes. Please upgrade to the latest published release on [NuGet](https://www.nuget.org/packages/Assertivo).
 
