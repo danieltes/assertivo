@@ -164,5 +164,3 @@ Shared NuGet packaging configuration lives in [`Directory.Build.props`](Director
 - **Opt in** — add `<IsPackable>true</IsPackable>` to a project's `.csproj` to enable packaging.
 - **Override metadata** — set any packaging property (e.g. `<Description>`) in the project's `.csproj` to replace the shared default.
 - **Build packages** — run `dotnet pack -c Release` at the solution root.
-
-See [`specs/00002-nuget-packaging/quickstart.md`](specs/00002-nuget-packaging/quickstart.md) for the full packaging guide.
