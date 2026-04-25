@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Assertivo.Primitives;
 
 namespace Assertivo.Exceptions;
 
@@ -61,5 +62,36 @@ public readonly struct ActionAssertions
             because,
             becauseArgs);
         return default!;
+    }
+
+    /// <summary>
+    /// Asserts that the action does not throw any exception.
+    /// </summary>
+    /// <param name="because">An optional reason for the assertion.</param>
+    /// <param name="becauseArgs">Optional format arguments for <paramref name="because"/>.</param>
+    [StackTraceHidden]
+    public AndConstraint<ActionAssertions> NotThrow(string because = "", params object[] becauseArgs)
+    {
+        Exception? caught = null;
+        try
+        {
+            Subject();
+        }
+        catch (Exception ex)
+        {
+            caught = ex;
+        }
+
+        if (caught is not null)
+        {
+            MessageFormatter.Fail(
+                "no exception to be thrown",
+                $"<{caught.GetType().FullName}> was thrown",
+                Expression,
+                because,
+                becauseArgs);
+        }
+
+        return new AndConstraint<ActionAssertions>(this);
     }
 }

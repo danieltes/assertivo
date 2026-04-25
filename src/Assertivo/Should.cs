@@ -34,6 +34,37 @@ public static class ShouldExtensions
     public static AsyncFunctionAssertions Should(this Func<Task> subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
         => new(subject, caller);
 
+    /// <summary>
+    /// Returns an <see cref="ActionAssertions"/> for the specified function subject,
+    /// adapting it to an <see cref="Action"/> by discarding the return value.
+    /// </summary>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown immediately if <paramref name="subject"/> is <see langword="null"/>.
+    /// </exception>
+    public static ActionAssertions Should<T>(this Func<T> subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
+    {
+        ArgumentNullException.ThrowIfNull(subject);
+        return new ActionAssertions(() => subject(), caller);
+    }
+
+    /// <summary>
+    /// Returns a <see cref="GenericCollectionAssertions{T}"/> for the specified
+    /// read-only list subject.
+    /// </summary>
+    public static GenericCollectionAssertions<T> Should<T>(
+        this IReadOnlyList<T>? subject,
+        [CallerArgumentExpression(nameof(subject))] string? caller = null)
+        => new(subject, caller);
+
+    /// <summary>
+    /// Returns a <see cref="GenericCollectionAssertions{T}"/> for the specified
+    /// read-only collection subject.
+    /// </summary>
+    public static GenericCollectionAssertions<T> Should<T>(
+        this IReadOnlyCollection<T>? subject,
+        [CallerArgumentExpression(nameof(subject))] string? caller = null)
+        => new(subject, caller);
+
     /// <summary>Returns a <see cref="GenericCollectionAssertions{T}"/> for the specified enumerable subject.</summary>
     public static GenericCollectionAssertions<T> Should<T>(this IEnumerable<T>? subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
         => new(subject, caller);
