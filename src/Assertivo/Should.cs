@@ -74,7 +74,9 @@ public static class ShouldExtensions
         => new(subject, caller);
 
     /// <summary>Returns a <see cref="GenericCollectionAssertions{T}"/> for the specified list subject.</summary>
-    public static GenericCollectionAssertions<T> Should<T>(this List<T>? subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
+    public static GenericCollectionAssertions<T> Should<T>(
+        this List<T>? subject,
+        [CallerArgumentExpression(nameof(subject))] string? caller = null)
         => new(subject, caller);
 
     /// <summary>Returns a <see cref="GenericDictionaryAssertions{TKey, TValue}"/> for the specified dictionary subject.</summary>

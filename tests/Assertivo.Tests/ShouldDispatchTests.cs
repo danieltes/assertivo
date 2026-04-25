@@ -187,4 +187,18 @@ public class ShouldDispatchTests
         IEnumerable<string> subject = new List<string> { "x" };
         Assert.IsType<GenericCollectionAssertions<string>>(subject.Should());
     }
+
+    [Fact]
+    public void Should_ListSubject_ReturnsGenericCollectionAssertions()
+    {
+        List<string> subject = new List<string> { "a", "b" };
+        Assert.IsType<GenericCollectionAssertions<string>>(subject.Should());
+    }
+
+    [Fact]
+    public void Should_IEnumerableKVPSubject_ReturnsGenericDictionaryAssertions()
+    {
+        IEnumerable<KeyValuePair<string, int>> subject = new Dictionary<string, int> { ["x"] = 1 };
+        Assert.IsType<GenericDictionaryAssertions<string, int>>(subject.Should());
+    }
 }
