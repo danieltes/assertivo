@@ -63,4 +63,13 @@ public class ActionAssertionsTests
             act.Should().Throw<InvalidOperationException>(because: "it should throw"));
         Assert.Contains("it should throw", ex.Message);
     }
+
+    [Fact]
+    public void NotThrow_WhenSubjectThrows_Fails()
+    {
+        Action act = () => throw new InvalidOperationException("unexpected");
+        var ex = Assert.Throws<AssertionFailedException>(() => act.Should().NotThrow());
+        Assert.Contains("InvalidOperationException", ex.Actual);
+        Assert.Contains("no exception", ex.Expected);
+    }
 }
