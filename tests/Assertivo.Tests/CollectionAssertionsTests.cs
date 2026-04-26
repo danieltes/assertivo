@@ -1,5 +1,6 @@
 using Assertivo;
 using Assertivo.Collections;
+using Assertivo.Primitives;
 
 namespace Assertivo.Tests;
 
@@ -181,5 +182,77 @@ public class CollectionAssertionsTests
         var ex = Assert.Throws<AssertionFailedException>(() =>
             list.Should().HaveCount(3, because: "we need three items"));
         Assert.Contains("we need three items", ex.Message);
+    }
+
+    // T012 (SC-007)
+    [Fact]
+    public void NotBeNull_NonNullCollection_Passes()
+    {
+        IEnumerable<int> list = new List<int> { 1, 2, 3 };
+        list.Should().NotBeNull();
+    }
+
+    // T013 (SC-008)
+    [Fact]
+    public void NotBeNull_NullCollection_Fails()
+    {
+        IEnumerable<int>? list = null;
+        var ex = Assert.Throws<AssertionFailedException>(() => list.Should().NotBeNull());
+        Assert.Equal("not <null>", ex.Expected);
+        Assert.Equal("<null>", ex.Actual);
+    }
+
+    // T014
+    [Fact]
+    public void NotBeNull_Chaining_HaveCount()
+    {
+        IEnumerable<int> list = new List<int> { 1, 2, 3 };
+        list.Should().NotBeNull().And.HaveCount(3);
+    }
+
+    // T015 (SC-009)
+    [Fact]
+    public void BeNull_NullCollection_Passes()
+    {
+        IEnumerable<int>? list = null;
+        list.Should().BeNull();
+    }
+
+    // T016 (SC-010)
+    [Fact]
+    public void BeNull_NonNullCollection_Fails()
+    {
+        List<int> list = new List<int> { 1, 2 };
+        var ex = Assert.Throws<AssertionFailedException>(() => list.Should().BeNull());
+        Assert.Equal("<null>", ex.Expected);
+    }
+
+    // T017
+    [Fact]
+    public void BeNull_NullCollection_Chaining()
+    {
+        IEnumerable<int>? list = null;
+        AndConstraint<GenericCollectionAssertions<int>> result = list.Should().BeNull();
+        _ = result.And;
+    }
+
+    // T018 (US3 scenario 2)
+    [Fact]
+    public void NotBeNull_NullCollection_WithBecause_IncludesReasonInMessage()
+    {
+        IEnumerable<int>? list = null;
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            list.Should().NotBeNull("the list must be populated"));
+        Assert.Contains("the list must be populated", ex.Message);
+    }
+
+    // T023 (US3 scenario 4)
+    [Fact]
+    public void BeNull_NonNullCollection_WithBecause_IncludesReasonInMessage()
+    {
+        List<int> list = new List<int> { 1 };
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            list.Should().BeNull("the list must be populated"));
+        Assert.Contains("the list must be populated", ex.Message);
     }
 }
