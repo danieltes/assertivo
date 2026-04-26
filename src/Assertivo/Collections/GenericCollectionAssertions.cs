@@ -21,6 +21,48 @@ public readonly struct GenericCollectionAssertions<T>
     internal string? Expression { get; }
 
     /// <summary>
+    /// Asserts that the subject is not <see langword="null"/>.
+    /// </summary>
+    /// <param name="because">An optional reason for the assertion.</param>
+    /// <param name="becauseArgs">Optional format arguments for <paramref name="because"/>.</param>
+    /// <returns>An <see cref="AndConstraint{TAssertions}"/> for continued chaining.</returns>
+    [StackTraceHidden]
+    public AndConstraint<GenericCollectionAssertions<T>> NotBeNull(string because = "", params object[] becauseArgs)
+    {
+        if (Subject is null)
+        {
+            MessageFormatter.Fail(
+                "not <null>",
+                "<null>",
+                Expression,
+                because,
+                becauseArgs);
+        }
+        return new AndConstraint<GenericCollectionAssertions<T>>(this);
+    }
+
+    /// <summary>
+    /// Asserts that the subject is <see langword="null"/>.
+    /// </summary>
+    /// <param name="because">An optional reason for the assertion.</param>
+    /// <param name="becauseArgs">Optional format arguments for <paramref name="because"/>.</param>
+    /// <returns>An <see cref="AndConstraint{TAssertions}"/> for continued chaining.</returns>
+    [StackTraceHidden]
+    public AndConstraint<GenericCollectionAssertions<T>> BeNull(string because = "", params object[] becauseArgs)
+    {
+        if (Subject is not null)
+        {
+            MessageFormatter.Fail(
+                "<null>",
+                MessageFormatter.FormatValue(Subject),
+                Expression,
+                because,
+                becauseArgs);
+        }
+        return new AndConstraint<GenericCollectionAssertions<T>>(this);
+    }
+
+    /// <summary>
     /// Asserts that the collection has exactly <paramref name="expected"/> elements.
     /// </summary>
     [StackTraceHidden]
