@@ -59,6 +59,13 @@ public class ShouldDispatchTests
     }
 
     [Fact]
+    public void Should_IReadOnlyListSubject_AllSatisfyIndexAware_Passes()
+    {
+        IReadOnlyList<int> subject = [10, 20, 30];
+        subject.Should().AllSatisfy((value, index) => value.Should().Be((index + 1) * 10));
+    }
+
+    [Fact]
     public void Should_IReadOnlyListSubject_BeEquivalentTo_Passes()
     {
         IReadOnlyList<string> subject = new List<string> { "a", "b" };
@@ -70,6 +77,13 @@ public class ShouldDispatchTests
     {
         IReadOnlyCollection<string> subject = new List<string> { "x", "y" };
         subject.Should().HaveCount(2);
+    }
+
+    [Fact]
+    public void Should_IReadOnlyCollectionSubject_AllSatisfyIndexAware_Passes()
+    {
+        IReadOnlyCollection<int> subject = [4, 5, 6];
+        subject.Should().AllSatisfy((value, index) => value.Should().Be(index + 4));
     }
 
     [Fact]
@@ -189,10 +203,31 @@ public class ShouldDispatchTests
     }
 
     [Fact]
+    public void Should_IEnumerableTSubject_AllSatisfyIndexAware_Passes()
+    {
+        IEnumerable<int> subject = [1, 2, 3];
+        subject.Should().AllSatisfy((value, index) => value.Should().Be(index + 1));
+    }
+
+    [Fact]
     public void Should_ListSubject_ReturnsGenericCollectionAssertions()
     {
         List<string> subject = new List<string> { "a", "b" };
         Assert.IsType<GenericCollectionAssertions<string>>(subject.Should());
+    }
+
+    [Fact]
+    public void Should_ListSubject_AllSatisfyIndexAware_Passes()
+    {
+        List<int> subject = [7, 8, 9];
+        subject.Should().AllSatisfy((value, index) => value.Should().Be(index + 7));
+    }
+
+    [Fact]
+    public void Should_ArraySubject_AllSatisfyIndexAware_Passes()
+    {
+        int[] subject = [11, 12, 13];
+        subject.Should().AllSatisfy((value, index) => value.Should().Be(index + 11));
     }
 
     [Fact]

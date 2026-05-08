@@ -184,30 +184,51 @@ public readonly struct GenericCollectionAssertions<T>
     [StackTraceHidden]
     public AndConstraint<GenericCollectionAssertions<T>> AllSatisfy(Action<T> inspector, string because = "", params object[] becauseArgs)
     {
+        ArgumentNullException.ThrowIfNull(inspector);
+        return AllSatisfyCore((item, _) => inspector(item), because, becauseArgs);
+    }
+
+    /// <summary>
+    /// Asserts that all elements in the collection satisfy the <paramref name="inspector"/> and provides each element index.
+    /// </summary>
+    [StackTraceHidden]
+    public AndConstraint<GenericCollectionAssertions<T>> AllSatisfy(Action<T, int> inspector, string because = "", params object[] becauseArgs)
+    {
+        ArgumentNullException.ThrowIfNull(inspector);
+        return AllSatisfyCore(inspector, because, becauseArgs);
+    }
+
+    [StackTraceHidden]
+    private AndConstraint<GenericCollectionAssertions<T>> AllSatisfyCore(Action<T, int> inspector, string because, object[] becauseArgs)
+    {
         GuardNull();
-        var failures = new List<(int Index, Exception Error)>();
-        int index = 0;
+
+        var failures = new List<AllSatisfyElementFailure>();
+        var index = 0;
         foreach (var item in Subject!)
         {
             try
             {
-                inspector(item);
+                inspector(item, index);
             }
             catch (Exception ex)
             {
-                failures.Add((index, ex));
+                failures.Add(new AllSatisfyElementFailure(index, ex));
             }
+
             index++;
         }
 
         if (failures.Count > 0)
         {
-            var failureMessages = string.Join("; ", failures.Select(f => $"[{f.Index}]: {f.Error.Message}"));
             MessageFormatter.Fail(
                 "all elements to satisfy the inspector",
-                $"{failures.Count} element(s) failed: {failureMessages}",
-                Expression, because, becauseArgs);
+                AllSatisfyFailureFormatter.BuildActual(failures),
+                Expression,
+                because,
+                becauseArgs);
         }
+
         return new AndConstraint<GenericCollectionAssertions<T>>(this);
     }
 
