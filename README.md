@@ -74,6 +74,10 @@ items.Should().HaveCount(3);
 items.Should().Contain("b");
 items.Should().BeEquivalentTo("c", "a", "b"); // order-independent
 items.Should().NotBeEmpty();
+
+var scores = new List<int> { 10, 20, 30 };
+scores.Should().AllSatisfy(score => score.Should().BeGreaterThanOrEqualTo(10));
+scores.Should().AllSatisfy((score, index) => score.Should().Be((index + 1) * 10));
 ```
 
 ### Drill-down with `.Which`

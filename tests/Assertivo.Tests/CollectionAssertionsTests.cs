@@ -124,7 +124,7 @@ public class CollectionAssertionsTests
     }
 
     [Fact]
-    public void BeEquivalentTo_DuplicatesMatter()
+    public void BeEquivalentTo_DuplicateCountsDiffer_ShouldFail()
     {
         IEnumerable<int> list = new List<int> { 1, 1, 2 };
         Assert.Throws<AssertionFailedException>(() =>
@@ -155,6 +155,48 @@ public class CollectionAssertionsTests
     }
 
     [Fact]
+    public void AllSatisfy_SingleFailure_AggregatesAndReportsSingleIndex()
+    {
+        IEnumerable<int> list = new List<int> { 2, 3, 4 };
+
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            list.Should().AllSatisfy(x => x.Should().BeGreaterThanOrEqualTo(3)));
+
+        Assert.Contains("1 element(s) failed", ex.Message);
+        Assert.Contains("[0]", ex.Message);
+    }
+
+    [Fact]
+    public void AllSatisfy_MultipleFailures_AggregatesAllFailingIndices()
+    {
+        IEnumerable<int> list = new List<int> { 1, 2, 3, 4, 5 };
+
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            list.Should().AllSatisfy(x => (x % 2).Should().Be(0)));
+
+        Assert.Contains("3 element(s) failed", ex.Message);
+        Assert.Contains("[0]", ex.Message);
+        Assert.Contains("[2]", ex.Message);
+        Assert.Contains("[4]", ex.Message);
+    }
+
+    [Fact]
+    public void AllSatisfy_FailingElements_DoNotStopTraversal()
+    {
+        IEnumerable<int> list = new List<int> { 1, 2, 3, 4, 5 };
+        var invocationCount = 0;
+
+        Assert.Throws<AssertionFailedException>(() =>
+            list.Should().AllSatisfy(x =>
+            {
+                invocationCount++;
+                x.Should().Be(0);
+            }));
+
+        Assert.Equal(5, invocationCount);
+    }
+
+    [Fact]
     public void AllSatisfy_EmptyCollection_PassesVacuously()
     {
         IEnumerable<int> list = new List<int>();
@@ -162,7 +204,7 @@ public class CollectionAssertionsTests
     }
 
     [Fact]
-    public void NullSubject_Fails()
+    public void NullSubject_WhenUsingCollectionAssertion_ShouldFail()
     {
         IEnumerable<int>? list = null;
         Assert.Throws<AssertionFailedException>(() => list.Should().HaveCount(0));

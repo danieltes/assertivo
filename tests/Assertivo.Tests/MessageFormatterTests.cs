@@ -5,21 +5,21 @@ namespace Assertivo.Tests;
 public class MessageFormatterTests
 {
     [Fact]
-    public void BecauseWithArgs_FormatsCorrectly()
+    public void FormatReason_WhenBecauseHasArgs_ShouldFormatCorrectly()
     {
         string? result = MessageFormatter.FormatReason("expected {0} items", [3]);
         Assert.Equal("expected 3 items", result);
     }
 
     [Fact]
-    public void BecauseWithoutArgs_ReturnsAsIs()
+    public void FormatReason_WhenBecauseHasNoArgs_ShouldReturnAsIs()
     {
         string? result = MessageFormatter.FormatReason("simple reason", []);
         Assert.Equal("simple reason", result);
     }
 
     [Fact]
-    public void EmptyBecause_ReturnsNull()
+    public void FormatReason_WhenBecauseIsEmpty_ShouldReturnNull()
     {
         string? result = MessageFormatter.FormatReason("", []);
         Assert.Null(result);
@@ -44,6 +44,12 @@ public class MessageFormatterTests
     }
 
     [Fact]
+    public void FormatValue_ToStringReturnsNull_UsesNullFallback()
+    {
+        Assert.Equal("<null>", MessageFormatter.FormatValue(new NullToStringValue()));
+    }
+
+    [Fact]
     public void BuildMessage_WithAllFields_ContainsAllParts()
     {
         string message = MessageFormatter.BuildMessage("42", "99", "myVar", "it should match");
@@ -61,7 +67,7 @@ public class MessageFormatterTests
     }
 
     [Fact]
-    public void AssertionFailure_StoresAllProperties()
+    public void AssertionFailure_WhenConstructed_ShouldStoreAllProperties()
     {
         var failure = new AssertionFailure("expected", "actual", "expr", "reason", "full message");
         Assert.Equal("expected", failure.Expected);
@@ -89,11 +95,44 @@ public class MessageFormatterTests
     }
 
     [Fact]
-    public void CallerArgumentExpression_CapturesSubjectExpression()
+    public void AssertionConfiguration_NonNullDelegate_AssignsSuccessfully()
+    {
+        var current = AssertionConfiguration.ReportFailure;
+        AssertionConfiguration.ReportFailure = current;
+
+        Assert.Same(current, AssertionConfiguration.ReportFailure);
+    }
+
+    [Fact]
+    public void BuildMessage_WithReasonAndNoExpression_IncludesReasonOnly()
+    {
+        string message = MessageFormatter.BuildMessage("42", "99", null, "because value is fixed");
+        Assert.DoesNotContain("Expression:", message);
+        Assert.Contains("Because: because value is fixed", message);
+    }
+
+    [Fact]
+    public void CallerArgumentExpression_WhenAssertionFails_ShouldCaptureSubjectExpression()
     {
         int myVariable = 42;
         var ex = Assert.Throws<AssertionFailedException>(() => myVariable.Should().Be(99));
         Assert.NotNull(ex.Expression);
         Assert.Contains("myVariable", ex.Expression);
+    }
+
+    [Fact]
+    public void NonAllSatisfyFailureMessageShape_WhenObjectAssertionFails_ShouldRemainUnchanged()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() => 2.Should().Be(3, because: "numbers should match"));
+
+        Assert.Contains("Expected 3 but found 2.", ex.Message);
+        Assert.Contains("Because: numbers should match", ex.Message);
+        Assert.Equal("3", ex.Expected);
+        Assert.Equal("2", ex.Actual);
+    }
+
+    private sealed class NullToStringValue
+    {
+        public override string? ToString() => null;
     }
 }
