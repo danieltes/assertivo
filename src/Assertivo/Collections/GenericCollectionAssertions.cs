@@ -7,7 +7,7 @@ namespace Assertivo.Collections;
 /// Assertions for generic collections implementing <see cref="IEnumerable{T}"/>.
 /// </summary>
 /// <typeparam name="T">The element type of the collection.</typeparam>
-public readonly struct GenericCollectionAssertions<T>
+public readonly partial struct GenericCollectionAssertions<T>
 {
     internal GenericCollectionAssertions(IEnumerable<T>? subject, string? expression)
     {
