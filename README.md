@@ -80,6 +80,22 @@ scores.Should().AllSatisfy(score => score.Should().BeGreaterThanOrEqualTo(10));
 scores.Should().AllSatisfy((score, index) => score.Should().Be((index + 1) * 10));
 ```
 
+### Ordered sequence equality
+
+```csharp
+// Inline values (params overload)
+var result = GetSortedIds();
+result.Should().Equal(10, 20, 30);
+
+// IEnumerable overload with reason
+var output = pipeline.Process(input);
+output.Should().Equal(expectedOutput, because: "pipeline output must be deterministic");
+
+// Custom comparer
+var names = new[] { "Alice", "BOB" };
+names.Should().Equal(new[] { "alice", "bob" }, comparer: StringComparer.OrdinalIgnoreCase);
+```
+
 ### Drill-down with `.Which`
 
 ```csharp
