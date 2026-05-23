@@ -114,6 +114,30 @@ act.Should().Throw<ArgumentNullException>()
 
 ### Async exception assertions
 
+Assert directly on a `Task` — no lambda wrapper required:
+
+```csharp
+Task task = repository.SaveAsync(entity);
+await task.Should().ThrowAsync<DbException>();
+```
+
+Chain further assertions on the caught exception via `.Which`:
+
+```csharp
+Task<User> task = service.GetUserAsync(id);
+var ex = await task.Should().ThrowAsync<NotFoundException>();
+ex.Which.ResourceId.Should().Be(id);
+```
+
+Pass a `because` reason to provide context in CI output:
+
+```csharp
+await task.Should().ThrowAsync<TimeoutException>(
+    "because the call must fail fast when the upstream is unavailable");
+```
+
+The `Func<Task>` entry point is still supported for cases where you need to capture the subject lazily:
+
 ```csharp
 Func<Task> act = async () => { await Task.Delay(1); throw new InvalidOperationException(); };
 await act.Should().ThrowAsync<InvalidOperationException>();
