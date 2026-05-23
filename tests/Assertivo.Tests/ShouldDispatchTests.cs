@@ -236,4 +236,42 @@ public class ShouldDispatchTests
         IEnumerable<KeyValuePair<string, int>> subject = new Dictionary<string, int> { ["x"] = 1 };
         Assert.IsType<GenericDictionaryAssertions<string, int>>(subject.Should());
     }
+
+    // ── T013: Task / Func<Task> dispatch ─────────────────────────────────────
+
+    [Fact]
+    public void Should_TaskSubject_ReturnsTaskAssertions()
+    {
+        Task task = Task.CompletedTask;
+        Assert.IsType<TaskAssertions>(task.Should());
+    }
+
+    [Fact]
+    public void Should_TaskOfTSubject_ReturnsTaskAssertions()
+    {
+        Task<int> task = Task.FromResult(42);
+        Assert.IsType<TaskAssertions>(task.Should());
+    }
+
+    [Fact]
+    public void Should_FuncTaskSubject_StillReturnsAsyncFunctionAssertions()
+    {
+        Func<Task> fn = () => Task.CompletedTask;
+        Assert.IsType<AsyncFunctionAssertions>(fn.Should());
+    }
+
+    [Fact]
+    public async Task Should_TaskAndFuncTask_BehaviourEquivalent_ForFaultingInput()
+    {
+        var innerEx = new InvalidOperationException("msg");
+
+        var taskResult = (await Task.FromException(innerEx).Should()
+            .ThrowAsync<InvalidOperationException>()).Which.Message;
+
+        var funcResult = (await ((Func<Task>)(async () => throw innerEx)).Should()
+            .ThrowAsync<InvalidOperationException>()).Which.Message;
+
+        Assert.Equal("msg", taskResult);
+        Assert.Equal("msg", funcResult);
+    }
 }
