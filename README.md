@@ -143,6 +143,37 @@ Func<Task> act = async () => { await Task.Delay(1); throw new InvalidOperationEx
 await act.Should().ThrowAsync<InvalidOperationException>();
 ```
 
+### Async iterator assertions
+
+Assert directly on an `IAsyncEnumerable<T>` — no `await foreach`, no `try/catch`, no lambda wrapper:
+
+```csharp
+IAsyncEnumerable<int> stream = repository.StreamOrdersAsync(customerId);
+await stream.Should().ThrowAsync<UnauthorizedException>();
+```
+
+Chain further assertions on the caught exception via `.Which`:
+
+```csharp
+IAsyncEnumerable<Event> events = feed.ReadAsync();
+var ex = await events.Should().ThrowAsync<StreamClosedException>();
+ex.Which.Reason.Should().Be("server disconnected");
+```
+
+Pass a `because` reason to provide context in CI output:
+
+```csharp
+await stream.Should().ThrowAsync<RateLimitException>(
+    "because the quota for this tenant is exhausted");
+```
+
+`AggregateException` with a single inner exception is automatically unwrapped — the same behaviour as the `Task` and `Func<Task>` entry points:
+
+```csharp
+// AggregateException(InvalidOperationException) → passes as InvalidOperationException
+await stream.Should().ThrowAsync<InvalidOperationException>();
+```
+
 ### Custom comparers
 
 ```csharp

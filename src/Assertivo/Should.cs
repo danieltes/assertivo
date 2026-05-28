@@ -42,6 +42,10 @@ public static class ShouldExtensions
     public static TaskAssertions Should<TResult>(this Task<TResult>? subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
         => new(subject, caller);
 
+    /// <summary>Returns an <see cref="AsyncEnumerableAssertions{T}"/> for the specified async enumerable subject.</summary>
+    public static AsyncEnumerableAssertions<T> Should<T>(this IAsyncEnumerable<T>? subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
+        => new(subject, caller);
+
     /// <summary>
     /// Returns an <see cref="ActionAssertions"/> for the specified function subject,
     /// adapting it to an <see cref="Action"/> by discarding the return value.
