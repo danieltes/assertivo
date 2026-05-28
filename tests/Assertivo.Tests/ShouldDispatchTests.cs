@@ -274,4 +274,13 @@ public class ShouldDispatchTests
         Assert.Equal("msg", taskResult);
         Assert.Equal("msg", funcResult);
     }
+
+    // ── Feature 027: IAsyncEnumerable<T> dispatch ────────────────────────────
+
+    [Fact]
+    public void Should_AsyncEnumerableSubject_ReturnsAsyncEnumerableAssertions()
+    {
+        static async IAsyncEnumerable<int> Source() { yield return 1; }
+        Assert.IsType<AsyncEnumerableAssertions<int>>(Source().Should());
+    }
 }
