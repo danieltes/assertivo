@@ -116,4 +116,53 @@ public class StringAssertionsTests
     {
         Assert.Throws<AssertionFailedException>(() => "Hello World".Should().Contain("hello"));
     }
+
+    [Fact]
+    public void NotBe_WithDifferentStrings_Passes()
+    {
+        "hello".Should().NotBe("world");
+    }
+
+    [Fact]
+    public void NotBe_WithEqualStrings_FailsWithMessage()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() => "hello".Should().NotBe("hello"));
+        Assert.Equal("not \"hello\"", ex.Expected);
+        Assert.Equal("\"hello\"", ex.Actual);
+    }
+
+    [Fact]
+    public void NotBe_WithBecauseReason_IncludesReasonInMessage()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            "hello".Should().NotBe("hello", because: "strings must differ"));
+        Assert.Contains("strings must differ", ex.Message);
+    }
+
+    [Fact]
+    public void NotBe_ReturnsAndConstraint_AllowingChaining()
+    {
+        "hello".Should().NotBe("world").And.Be("hello");
+    }
+
+    // T010 — Null handling tests
+    [Fact]
+    public void NotBe_WithNullSubjectAndNonNullUnexpected_Passes()
+    {
+        string? value = null;
+        value.Should().NotBe("anything");
+    }
+
+    [Fact]
+    public void NotBe_WithNullSubjectAndNullUnexpected_Fails()
+    {
+        string? value = null;
+        Assert.Throws<AssertionFailedException>(() => value.Should().NotBe(null));
+    }
+
+    [Fact]
+    public void NotBe_WithNonNullSubjectAndNullUnexpected_Passes()
+    {
+        "hello".Should().NotBe(null);
+    }
 }

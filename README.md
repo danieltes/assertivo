@@ -46,7 +46,6 @@ dotnet test
 ```csharp
 bool isReady = true;
 isReady.Should().BeTrue();
-isReady.Should().NotBe(false);
 ```
 
 ### String assertions
@@ -56,6 +55,7 @@ string name = "Assertivo";
 name.Should().Contain("Assert");
 name.Should().NotBeNullOrEmpty();
 name.Should().NotContain("secret", "credentials must not be logged");
+name.Should().NotBe("None");
 ```
 
 ### Numeric assertions
@@ -64,6 +64,7 @@ name.Should().NotContain("secret", "credentials must not be logged");
 int count = 10;
 count.Should().BeGreaterThanOrEqualTo(5);
 count.Should().BeLessThan(100);
+count.Should().NotBe(0);
 ```
 
 ### Collection assertions
