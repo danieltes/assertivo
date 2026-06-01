@@ -36,6 +36,22 @@ public readonly struct StringAssertions
     }
 
     /// <summary>
+    /// Asserts that the subject does not equal the <paramref name="unexpected"/> string.
+    /// </summary>
+    [StackTraceHidden]
+    public AndConstraint<StringAssertions> NotBe(string? unexpected, string because = "", params object[] becauseArgs)
+    {
+        if (string.Equals(Subject, unexpected, StringComparison.Ordinal))
+        {
+            MessageFormatter.Fail(
+                $"not {MessageFormatter.FormatValue(unexpected)}",
+                MessageFormatter.FormatValue(Subject),
+                Expression, because, becauseArgs);
+        }
+        return new AndConstraint<StringAssertions>(this);
+    }
+
+    /// <summary>
     /// Asserts that the subject contains the <paramref name="expected"/> substring.
     /// </summary>
     [StackTraceHidden]

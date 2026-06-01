@@ -38,6 +38,23 @@ public readonly struct ObjectAssertions<T>
     }
 
     /// <summary>
+    /// Asserts that the subject does not equal the <paramref name="unexpected"/> value.
+    /// </summary>
+    [StackTraceHidden]
+    public AndConstraint<ObjectAssertions<T>> NotBe(T unexpected, IEqualityComparer<T>? comparer = null, string because = "", params object[] becauseArgs)
+    {
+        comparer ??= EqualityComparer<T>.Default;
+        if (comparer.Equals(Subject, unexpected))
+        {
+            MessageFormatter.Fail(
+                $"not {MessageFormatter.FormatValue(unexpected)}",
+                MessageFormatter.FormatValue(Subject),
+                Expression, because, becauseArgs);
+        }
+        return new AndConstraint<ObjectAssertions<T>>(this);
+    }
+
+    /// <summary>
     /// Asserts that the subject is the same reference as <paramref name="expected"/>.
     /// </summary>
     [StackTraceHidden]

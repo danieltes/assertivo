@@ -38,6 +38,23 @@ public readonly struct NumericAssertions<T> where T : struct, IComparable<T>, IE
     }
 
     /// <summary>
+    /// Asserts that the subject does not equal the <paramref name="unexpected"/> value.
+    /// </summary>
+    [StackTraceHidden]
+    public AndConstraint<NumericAssertions<T>> NotBe(T unexpected, IEqualityComparer<T>? comparer = null, string because = "", params object[] becauseArgs)
+    {
+        comparer ??= EqualityComparer<T>.Default;
+        if (comparer.Equals(Subject, unexpected))
+        {
+            MessageFormatter.Fail(
+                $"not {MessageFormatter.FormatValue(unexpected)}",
+                MessageFormatter.FormatValue(Subject),
+                Expression, because, becauseArgs);
+        }
+        return new AndConstraint<NumericAssertions<T>>(this);
+    }
+
+    /// <summary>
     /// Asserts that the subject is greater than or equal to <paramref name="value"/>.
     /// </summary>
     [StackTraceHidden]

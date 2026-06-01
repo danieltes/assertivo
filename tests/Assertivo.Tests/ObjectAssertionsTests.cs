@@ -164,4 +164,70 @@ public class ObjectAssertionsTests
         Assert.Contains("<null>", ex.Actual);
         Assert.Contains("String", ex.Expected);
     }
+
+    [Fact]
+    public void NotBe_WithDifferentValues_Passes()
+    {
+        int value = 42;
+        value.Should().NotBe(99);
+    }
+
+    [Fact]
+    public void NotBe_WithEqualValues_FailsWithMessage()
+    {
+        int value = 42;
+        var ex = Assert.Throws<AssertionFailedException>(() => value.Should().NotBe(42));
+        Assert.Equal("not 42", ex.Expected);
+        Assert.Equal("42", ex.Actual);
+    }
+
+    [Fact]
+    public void NotBe_WithBecauseReason_IncludesReasonInMessage()
+    {
+        int value = 42;
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            value.Should().NotBe(42, because: "values must differ"));
+        Assert.Contains("values must differ", ex.Message);
+    }
+
+    [Fact]
+    public void NotBe_ReturnsAndConstraint_AllowingChaining()
+    {
+        42.Should().NotBe(99).And.Be(42);
+    }
+
+    // T008 — Custom comparer tests
+    [Fact]
+    public void NotBe_WithCustomComparerReportingEqual_Fails()
+    {
+        // OrdinalIgnoreCase treats "hello" and "HELLO" as equal
+        string value = "hello";
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            value.Should<string>().NotBe("HELLO", StringComparer.OrdinalIgnoreCase));
+        Assert.Contains("not", ex.Expected);
+        Assert.Equal("\"hello\"", ex.Actual);
+    }
+
+    [Fact]
+    public void NotBe_WithCustomComparerReportingUnequal_Passes()
+    {
+        // Comparer that always reports false — identical values still pass
+        var neverEqual = EqualityComparer<string>.Create((a, b) => false);
+        "hello".Should<string>().NotBe("hello", neverEqual);
+    }
+
+    [Fact]
+    public void NotBe_WithNullComparer_FallsBackToDefault()
+    {
+        42.Should<int>().NotBe(99, comparer: null);
+    }
+
+    // T011 — Null reference subject tests
+    [Fact]
+    public void NotBe_WithNullReferenceSubjectAndNullUnexpected_Fails()
+    {
+        string? value = null;
+        Assert.Throws<AssertionFailedException>(() =>
+            value.Should<string?>().NotBe(null));
+    }
 }
