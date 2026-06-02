@@ -135,6 +135,35 @@ public readonly partial struct GenericCollectionAssertions<T>
     }
 
     /// <summary>
+    /// Asserts that the collection contains at least one element matching <paramref name="predicate"/>.
+    /// </summary>
+    /// <param name="predicate">The match predicate. Must not be <see langword="null"/>.</param>
+    /// <param name="because">An optional reason for the assertion.</param>
+    /// <param name="becauseArgs">Optional format arguments for <paramref name="because"/>.</param>
+    /// <returns>An <see cref="AndConstraint{TAssertions}"/> for continued chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> is <see langword="null"/>.</exception>
+    [StackTraceHidden]
+    public AndConstraint<GenericCollectionAssertions<T>> Contain(Func<T, bool> predicate, string because = "", params object[] becauseArgs)
+    {
+        ArgumentNullException.ThrowIfNull(predicate);
+        GuardNull();
+
+        var effectiveBecause = string.IsNullOrWhiteSpace(because) ? string.Empty : because;
+
+        if (!Subject!.Any(predicate))
+        {
+            MessageFormatter.Fail(
+                "a collection containing a matching element",
+                "no element matched the predicate",
+                Expression,
+                effectiveBecause,
+                becauseArgs);
+        }
+
+        return new AndConstraint<GenericCollectionAssertions<T>>(this);
+    }
+
+    /// <summary>
     /// Asserts that the collection is empty.
     /// </summary>
     [StackTraceHidden]
