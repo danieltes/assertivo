@@ -44,6 +44,83 @@ public class CollectionAssertionsTests
     }
 
     [Fact]
+    public void Contain_Predicate_OneMatch_Passes()
+    {
+        IEnumerable<int> list = new List<int> { 1, 2, 3 };
+        list.Should().Contain(x => x == 2);
+    }
+
+    [Fact]
+    public void Contain_Predicate_NoMatch_FailsWithExpectedActualContract()
+    {
+        IEnumerable<int> list = new List<int> { 1, 3, 5 };
+        var ex = Assert.Throws<AssertionFailedException>(() => list.Should().Contain(x => x % 2 == 0));
+        Assert.Equal("a collection containing a matching element", ex.Expected);
+        Assert.Equal("no element matched the predicate", ex.Actual);
+    }
+
+    [Fact]
+    public void Contain_Predicate_MultipleMatches_Passes()
+    {
+        IEnumerable<int> list = new List<int> { 2, 4, 6 };
+        list.Should().Contain(x => x % 2 == 0);
+    }
+
+    [Fact]
+    public void Contain_Predicate_EmptyCollection_Fails()
+    {
+        IEnumerable<int> list = Array.Empty<int>();
+        var ex = Assert.Throws<AssertionFailedException>(() => list.Should().Contain(x => x > 0));
+        Assert.Equal("a collection containing a matching element", ex.Expected);
+        Assert.Equal("no element matched the predicate", ex.Actual);
+    }
+
+    [Fact]
+    public void Contain_Predicate_NullSubject_FailsWithCanonicalNullContract()
+    {
+        IEnumerable<int>? list = null;
+        var ex = Assert.Throws<AssertionFailedException>(() => list.Should().Contain(x => x > 0));
+        Assert.Equal("a collection", ex.Expected);
+        Assert.Equal("<null>", ex.Actual);
+    }
+
+    [Fact]
+    public void Contain_Predicate_NullPredicate_ThrowsBeforeNullGuard()
+    {
+        IEnumerable<int>? list = null;
+        Func<int, bool>? predicate = null;
+
+        Assert.Throws<ArgumentNullException>(() => list.Should().Contain(predicate!));
+    }
+
+    [Fact]
+    public void Contain_Predicate_NoMatch_WithBecauseArgs_FormatsReason()
+    {
+        IEnumerable<string> list = new List<string> { "Draft", "Pending" };
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            list.Should().Contain(s => s == "Published", "status must be {0}", "Published"));
+
+        Assert.Contains("status must be Published", ex.Message);
+    }
+
+    [Fact]
+    public void Contain_Predicate_NoMatch_WithWhitespaceBecause_OmitsBecauseLine()
+    {
+        IEnumerable<int> list = new List<int> { 1, 3, 5 };
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            list.Should().Contain(x => x % 2 == 0, "   "));
+
+        Assert.DoesNotContain("Because:", ex.Message);
+    }
+
+    [Fact]
+    public void Contain_Predicate_Chaining_HaveCount_Passes()
+    {
+        IEnumerable<int> list = new List<int> { 1, 2, 3 };
+        list.Should().Contain(x => x == 2).And.HaveCount(3);
+    }
+
+    [Fact]
     public void BeEmpty_WithEmptyCollection_Passes()
     {
         IEnumerable<int> list = new List<int>();

@@ -81,6 +81,22 @@ scores.Should().AllSatisfy(score => score.Should().BeGreaterThanOrEqualTo(10));
 scores.Should().AllSatisfy((score, index) => score.Should().Be((index + 1) * 10));
 ```
 
+### Predicate collection containment
+
+```csharp
+var orders = new[]
+{
+    new { Id = 1, Status = "Pending" },
+    new { Id = 2, Status = "Shipped" }
+};
+
+// Passes when at least one element matches
+orders.Should().Contain(o => o.Status == "Shipped");
+
+// Supports chaining
+orders.Should().Contain(o => o.Status == "Shipped").And.HaveCount(2);
+```
+
 ### Ordered sequence equality
 
 ```csharp
