@@ -9,11 +9,11 @@ Add `BeNull()` and `NotBeNull()` to both `GenericDictionaryAssertions<TKey, TVal
 
 ## Technical Context
 
-**Language/Version**: C# 13 / .NET 10.0  
+**Language/Version**: C# 14 / .NET 10  
 **Primary Dependencies**: .NET BCL only (zero third-party; AOT-compatible)  
 **Storage**: N/A  
 **Testing**: xUnit via `Assertivo.Tests` (dotnet test)  
-**Target Platform**: .NET 10.0 (`net10.0`), `IsAotCompatible=true`, `TreatWarningsAsErrors=true`  
+**Target Platform**: .NET 10 (`net10.0`), `IsAotCompatible=true`, `TreatWarningsAsErrors=true`  
 **Project Type**: Open-source .NET assertion library (NuGet package)  
 **Performance Goals**: Happy-path (passing assertion) MUST be zero-allocation; `≥ 10M ops/sec` simple assertions  
 **Constraints**: No allocations on passing path; `<200ms` per test; XML doc on every public member; zero nullable warnings  

@@ -60,7 +60,7 @@ For null subjects/unexpecteds: `Expected not <null> but found <null>.`
 
 **Decision**: `EqualityComparer<T>.Default` is safe to use in AOT-compiled scenarios for both `ObjectAssertions<T>` and `NumericAssertions<T>`.
 
-**Rationale**: The .NET 8 runtime trimmer preserves `EqualityComparer<T>.Default` implementations for all value types referenced in code, and for reference types the default comparer falls back to `object.Equals` / `GetHashCode` which is always available. No `[DynamicDependency]` annotation is needed. This is the same pattern already used by `Be` on both types — no regression is introduced.
+**Rationale**: The .NET 10 runtime trimmer preserves `EqualityComparer<T>.Default` implementations for all value types referenced in code, and for reference types the default comparer falls back to `object.Equals` / `GetHashCode` which is always available. No `[DynamicDependency]` annotation is needed. This is the same pattern already used by `Be` on both types — no regression is introduced.
 
 **Alternatives considered**: Use `IEquatable<T>` directly. Rejected — `ObjectAssertions<T>` has no `IEquatable<T>` constraint and the comparer pattern is already established.
 

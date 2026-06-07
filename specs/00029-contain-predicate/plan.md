@@ -22,11 +22,11 @@ This feature also formalizes machine-checkable diagnostics (expected/actual phra
 
 ## Technical Context
 
-**Language/Version**: C# 12 / .NET 8 (multi-targeting in existing library)  
+**Language/Version**: C# 14 / .NET 10  
 **Primary Dependencies**: BCL only (`System`, `System.Linq`, `System.Collections.Generic`)  
 **Storage**: N/A  
 **Testing**: xUnit in `tests/Assertivo.Tests`  
-**Target Platform**: .NET assertion library (`net8.0` + `netstandard2.1`)  
+**Target Platform**: .NET assertion library (`net10.0`)  
 **Project Type**: Library  
 **Performance Goals**: Single-pass, early-exit predicate check (`Any(predicate)` equivalent behavior) with no unnecessary materialization; no second-pass enumeration  
 **Constraints**: Zero third-party dependencies; preserve fluent readability; keep file under 300 lines; nullable enabled; warnings as errors; AOT-safe implementation  

@@ -9,11 +9,11 @@ Add an `Equal` assertion to `GenericCollectionAssertions<T>` that verifies two s
 
 ## Technical Context
 
-**Language/Version**: C# 12 / .NET 8 (multi-target, same as existing codebase)  
+**Language/Version**: C# 14 / .NET 10  
 **Primary Dependencies**: BCL only — zero third-party dependencies (constitution requirement)  
 **Storage**: N/A  
 **Testing**: xUnit 2.9 via `Assertivo.Tests` project  
-**Target Platform**: .NET library (netstandard2.0 + net8.0)  
+**Target Platform**: .NET library (`net10.0`)  
 **Project Type**: Library  
 **Performance Goals**: Collection assertions ≥ 100,000 ops/sec on 1,000-element lists (constitution §6.3); happy-path allocation bounded by two `List<T>` + one `AndConstraint<T>` (constitution §6.2 collection budget)  
 **Constraints**: Zero deps; AOT-compatible; max 300 lines/file; max cyclomatic complexity 10; `TreatWarningsAsErrors`; nullable reference types enabled  

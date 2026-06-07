@@ -9,7 +9,7 @@ Add an `IAsyncEnumerable<T>.Should()` extension that returns a new `AsyncEnumera
 
 ## Technical Context
 
-**Language/Version**: C# 13 / .NET 10  
+**Language/Version**: C# 14 / .NET 10  
 **Primary Dependencies**: BCL only — `System.Collections.Generic.IAsyncEnumerable<T>`, `System.AggregateException`, `System.Runtime.CompilerServices.CallerArgumentExpressionAttribute`, `System.Diagnostics.StackTraceHiddenAttribute`  
 **Storage**: N/A  
 **Testing**: xUnit 2.9.3 + Coverlet (line ≥ 95%, branch ≥ 90% — constitution §IV.4.1 core-engine threshold)  
