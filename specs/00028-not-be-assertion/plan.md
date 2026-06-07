@@ -9,11 +9,11 @@ Add a `NotBe` method — the symmetric counterpart of `Be` — to `ObjectAsserti
 
 ## Technical Context
 
-**Language/Version**: C# 12 / .NET 8 (multi-targeting via `Directory.Build.props`)  
+**Language/Version**: C# 14 / .NET 10  
 **Primary Dependencies**: BCL only — `System.Collections.Generic.EqualityComparer<T>`, `System.String.Equals` with `StringComparison.Ordinal`  
 **Storage**: N/A  
 **Testing**: xUnit (`Assertivo.Tests` project) — `Assert.Throws<AssertionFailedException>`, `Assert.Contains`  
-**Target Platform**: .NET library (net8.0 + netstandard2.1 via multi-targeting)  
+**Target Platform**: .NET library (`net10.0`)  
 **Project Type**: Open-source assertion library  
 **Performance Goals**: Zero-allocation on passing path — `AndConstraint<T>` is a `readonly struct`, stack-only; ≥ 10M ops/sec  
 **Constraints**: AOT-compatible (`EqualityComparer<T>.Default` is AOT-safe); `TreatWarningsAsErrors`; nullable reference types enabled; max 300 lines/file  

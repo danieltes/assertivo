@@ -15,7 +15,7 @@ an explicit overload and is not in scope.
 
 ## Technical Context
 
-**Language/Version**: C# 13 / .NET 10  
+**Language/Version**: C# 14 / .NET 10  
 **Primary Dependencies**: .NET BCL only (zero third-party; constitution constraint)  
 **Storage**: N/A  
 **Testing**: xUnit 2.x (`Assertivo.Tests`)  

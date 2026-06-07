@@ -9,7 +9,7 @@ Add a `Task.Should()` extension method that returns a new `TaskAssertions` reado
 
 ## Technical Context
 
-**Language/Version**: C# 13 / .NET 10  
+**Language/Version**: C# 14 / .NET 10  
 **Primary Dependencies**: BCL only — `System.Threading.Tasks.Task`, `System.AggregateException`, `System.Runtime.CompilerServices.CallerArgumentExpressionAttribute`, `System.Diagnostics.StackTraceHiddenAttribute`  
 **Storage**: N/A  
 **Testing**: xUnit 2.9.3 + Coverlet (line ≥ 93%, branch ≥ 90%)  

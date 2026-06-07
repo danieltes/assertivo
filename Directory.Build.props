@@ -1,5 +1,9 @@
 <Project>
 
+  <PropertyGroup Label="Build Defaults">
+    <LangVersion>14.0</LangVersion>
+  </PropertyGroup>
+
   <!--
     Shared NuGet Packaging Configuration
     =====================================

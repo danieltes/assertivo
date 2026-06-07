@@ -9,7 +9,7 @@ Evolve the existing `AllSatisfy(Action<T>)` collection assertion into a first-cl
 
 ## Technical Context
 
-**Language/Version**: C# 13 / .NET 10 (`net10.0`)  
+**Language/Version**: C# 14 / .NET 10 (`net10.0`)  
 **Primary Dependencies**: .NET BCL only (zero third-party dependencies)  
 **Storage**: N/A  
 **Testing**: xUnit in `tests/Assertivo.Tests` via `dotnet test` (+ constitution-aligned coverage thresholds in CI: core engine >=95% line and >=90% branch, extension surfaces >=90% line)  
