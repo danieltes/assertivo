@@ -53,7 +53,8 @@ isReady.Should().BeTrue();
 ```csharp
 string name = "Assertivo";
 name.Should().Contain("Assert");
-name.Should().NotBeNullOrEmpty();
+name.Should().NotBeEmpty();         // passes for any non-"" value, including null
+name.Should().NotBeNullOrEmpty();   // fails on both null and ""
 name.Should().NotContain("secret", "credentials must not be logged");
 name.Should().NotBe("None");
 ```
