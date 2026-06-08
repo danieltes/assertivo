@@ -165,4 +165,55 @@ public class StringAssertionsTests
     {
         "hello".Should().NotBe(null);
     }
+
+    // NotBeEmpty tests
+    [Fact]
+    public void NotBeEmpty_WithNonEmptyString_Passes()
+    {
+        "hello".Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void NotBeEmpty_WithEmptyString_Fails()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() => "".Should().NotBeEmpty());
+        Assert.Equal("a non-empty string", ex.Expected);
+        Assert.Equal("\"\"", ex.Actual);
+    }
+
+    [Fact]
+    public void NotBeEmpty_WithBecauseReason_IncludesReasonInMessage()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            "".Should().NotBeEmpty(because: "response body must not be blank"));
+        Assert.Contains("response body must not be blank", ex.Message);
+    }
+
+    [Fact]
+    public void NotBeEmpty_WithNullSubject_Passes()
+    {
+        string? value = null;
+        value.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void NotBeEmpty_WithWhitespaceString_Passes()
+    {
+        "   ".Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void NotBeEmpty_ReturnsAndConstraint_AllowingChaining()
+    {
+        "hello".Should().NotBeEmpty().And.Be("hello");
+    }
+
+    [Fact]
+    public void NotBeEmpty_WithEmptyString_IncludesExpressionInMessage()
+    {
+        string value = "";
+        var ex = Assert.Throws<AssertionFailedException>(() => value.Should().NotBeEmpty());
+        Assert.NotNull(ex.Expression);
+        Assert.Contains("Expression:", ex.Message);
+    }
 }

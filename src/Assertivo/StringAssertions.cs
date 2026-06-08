@@ -114,4 +114,27 @@ public readonly struct StringAssertions
         }
         return new AndConstraint<StringAssertions>(this);
     }
+
+    /// <summary>
+    /// Asserts that the subject is not an empty string.
+    /// </summary>
+    /// <remarks>
+    /// Passes for any value other than <see cref="string.Empty"/>, including <see langword="null"/>.
+    /// Use <see cref="NotBeNullOrEmpty"/> to fail on both null and empty.
+    /// </remarks>
+    /// <param name="because">An optional reason for the assertion.</param>
+    /// <param name="becauseArgs">Optional format arguments for <paramref name="because"/>.</param>
+    /// <returns>An <see cref="AndConstraint{TAssertions}"/> for continued chaining.</returns>
+    [StackTraceHidden]
+    public AndConstraint<StringAssertions> NotBeEmpty(string because = "", params object[] becauseArgs)
+    {
+        if (string.Equals(Subject, string.Empty, StringComparison.Ordinal))
+        {
+            MessageFormatter.Fail(
+                "a non-empty string",
+                MessageFormatter.FormatValue(Subject),
+                Expression, because, becauseArgs);
+        }
+        return new AndConstraint<StringAssertions>(this);
+    }
 }

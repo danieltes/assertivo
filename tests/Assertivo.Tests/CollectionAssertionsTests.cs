@@ -374,4 +374,57 @@ public class CollectionAssertionsTests
             list.Should().BeNull("the list must be populated"));
         Assert.Contains("the list must be populated", ex.Message);
     }
+
+    // NotBeEmpty tests
+    [Fact]
+    public void NotBeEmpty_WithNonEmptyCollection_Passes()
+    {
+        new List<int> { 1 }.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void NotBeEmpty_WithEmptyCollection_Fails()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() => new List<int>().Should().NotBeEmpty());
+        Assert.Equal("a non-empty collection", ex.Expected);
+        Assert.Equal("an empty collection", ex.Actual);
+    }
+
+    [Fact]
+    public void NotBeEmpty_WithBecauseReason_IncludesReasonInMessage()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            new List<int>().Should().NotBeEmpty(because: "pipeline must produce results"));
+        Assert.Contains("pipeline must produce results", ex.Message);
+    }
+
+    [Fact]
+    public void NotBeEmpty_WithNullSubject_FailsWithNullGuard()
+    {
+        IEnumerable<int>? results = null;
+        var ex = Assert.Throws<AssertionFailedException>(() => results.Should().NotBeEmpty());
+        Assert.Equal("a collection", ex.Expected);
+        Assert.Equal("<null>", ex.Actual);
+    }
+
+    [Fact]
+    public void NotBeEmpty_ReturnsAndConstraint_AllowingChaining()
+    {
+        new[] { 1, 2 }.Should().NotBeEmpty().And.HaveCount(2);
+    }
+
+    [Fact]
+    public void NotBeEmpty_WithLazySequence_Passes()
+    {
+        Enumerable.Range(1, 5).Select(x => x).Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void NotBeEmpty_WithEmptyCollection_IncludesExpressionInMessage()
+    {
+        var collection = new List<int>();
+        var ex = Assert.Throws<AssertionFailedException>(() => collection.Should().NotBeEmpty());
+        Assert.NotNull(ex.Expression);
+        Assert.Contains("Expression:", ex.Message);
+    }
 }
