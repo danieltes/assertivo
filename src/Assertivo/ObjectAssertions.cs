@@ -77,6 +77,36 @@ public readonly struct ObjectAssertions<T>
     }
 
     /// <summary>
+    /// Asserts that the subject is not the same reference as <paramref name="unexpected"/>.
+    /// </summary>
+    /// <param name="unexpected">The reference the subject must not be identical to.</param>
+    /// <param name="because">An optional reason for the assertion.</param>
+    /// <param name="becauseArgs">Optional format arguments for <paramref name="because"/>.</param>
+    /// <returns>An <see cref="AndConstraint{TAssertions}"/> for continued chaining.</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when <typeparamref name="T"/> is a value type, because reference comparison
+    /// is not meaningful for value types.
+    /// </exception>
+    [StackTraceHidden]
+    public AndConstraint<ObjectAssertions<T>> NotBeSameAs(object? unexpected, string because = "", params object[] becauseArgs)
+    {
+        if (typeof(T).IsValueType)
+        {
+            throw new InvalidOperationException(
+                $"NotBeSameAs is not meaningful for value type '{typeof(T).Name}'. Use Be() for value equality.");
+        }
+
+        if (ReferenceEquals(Subject, unexpected))
+        {
+            MessageFormatter.Fail(
+                "not the same reference",
+                "same reference",
+                Expression, because, becauseArgs);
+        }
+        return new AndConstraint<ObjectAssertions<T>>(this);
+    }
+
+    /// <summary>
     /// Asserts that the subject is <see langword="null"/>.
     /// </summary>
     [StackTraceHidden]

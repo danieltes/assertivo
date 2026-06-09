@@ -11,6 +11,8 @@ public class ShouldBeBenchmarks
 	private readonly int _value = 42;
 	private readonly int[] _subject = Enumerable.Range(0, 1000).ToArray();
 	private readonly int[] _expected = Enumerable.Range(0, 1000).ToArray();
+	private readonly object _objA = new();
+	private readonly object _objB = new();
 
 	[Benchmark]
 	public void Should_Be_HappyPath_ZeroAllocation()
@@ -22,5 +24,11 @@ public class ShouldBeBenchmarks
 	public void Equal_HappyPath_1000Elements()
 	{
 		_subject.Should().Equal(_expected);
+	}
+
+	[Benchmark]
+	public void NotBeSameAs_HappyPath_ZeroAllocation()
+	{
+		_objA.Should().NotBeSameAs(_objB);
 	}
 }

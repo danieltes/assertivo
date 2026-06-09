@@ -39,6 +39,7 @@ public readonly struct ObjectAssertions<T>
     public T Subject { get; }
     public AndConstraint<ObjectAssertions<T>> Be(T expected, IEqualityComparer<T>? comparer = null, string because = "", params object[] becauseArgs);
     public AndConstraint<ObjectAssertions<T>> BeSameAs(object? expected, string because = "", params object[] becauseArgs);
+    public AndConstraint<ObjectAssertions<T>> NotBeSameAs(object? unexpected, string because = "", params object[] becauseArgs);
     public AndConstraint<ObjectAssertions<T>> BeNull(string because = "", params object[] becauseArgs);
     public AndConstraint<ObjectAssertions<T>> NotBeNull(string because = "", params object[] becauseArgs);
     public AndWhichConstraint<ObjectAssertions<T>, TTarget> BeOfType<TTarget>(string because = "", params object[] becauseArgs);
