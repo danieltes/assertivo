@@ -192,6 +192,17 @@ await stream.Should().ThrowAsync<RateLimitException>(
 await stream.Should().ThrowAsync<InvalidOperationException>();
 ```
 
+### Object assertions
+
+```csharp
+var a = new MyService();
+var b = new MyService();
+
+a.Should().NotBeSameAs(b);                                       // different instances
+a.Should().NotBeSameAs(b, "each request must get its own scope");
+a.Should().NotBeSameAs(b).And.NotBeNull();                       // chainable
+```
+
 ### Custom comparers
 
 ```csharp
