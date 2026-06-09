@@ -230,4 +230,55 @@ public class ObjectAssertionsTests
         Assert.Throws<AssertionFailedException>(() =>
             value.Should<string?>().NotBe(null));
     }
+
+    // NotBeSameAs tests (T003, T004, T006, T007, T008, T009)
+
+    [Fact]
+    public void NotBeSameAs_WithDifferentReferences_Passes()
+    {
+        var a = new object();
+        var b = new object();
+        a.Should().NotBeSameAs(b).And.NotBeNull();
+    }
+
+    [Fact]
+    public void NotBeSameAs_WithSameReference_Fails()
+    {
+        var obj = new object();
+        var ex = Assert.Throws<AssertionFailedException>(() => obj.Should().NotBeSameAs(obj));
+        Assert.Equal("not the same reference", ex.Expected);
+        Assert.Equal("same reference", ex.Actual);
+    }
+
+    [Fact]
+    public void NotBeSameAs_WithNullSubjectAndNullUnexpected_Fails()
+    {
+        object? subject = null;
+        Assert.Throws<AssertionFailedException>(() => subject.Should<object?>().NotBeSameAs(null));
+    }
+
+    [Fact]
+    public void NotBeSameAs_WithNullSubjectAndNonNullUnexpected_Passes()
+    {
+        object? subject = null;
+        subject.Should<object?>().NotBeSameAs(new object());
+    }
+
+    [Fact]
+    public void NotBeSameAs_WithBecauseReason_IncludesReasonInMessage()
+    {
+        var obj = new object();
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            obj.Should().NotBeSameAs(obj, because: "the factory must return a new instance"));
+        Assert.Equal("the factory must return a new instance", ex.Reason);
+        Assert.Contains("the factory must return a new instance", ex.Message);
+    }
+
+    [Fact]
+    public void NotBeSameAs_WithValueType_ThrowsInvalidOperationException()
+    {
+        int value = 42;
+        var ex = Assert.Throws<InvalidOperationException>(() => value.Should<int>().NotBeSameAs(42));
+        Assert.Equal("NotBeSameAs is not meaningful for value type 'Int32'. Use Be() for value equality.", ex.Message);
+    }
 }
