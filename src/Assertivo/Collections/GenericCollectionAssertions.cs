@@ -164,17 +164,18 @@ public readonly partial struct GenericCollectionAssertions<T>
     }
 
     /// <summary>
-    /// Asserts that the collection is empty.
+    /// Asserts that the collection is empty. Enumerates the subject exactly once; safe for non-replayable sequences.
     /// </summary>
     [StackTraceHidden]
     public AndConstraint<GenericCollectionAssertions<T>> BeEmpty(string because = "", params object[] becauseArgs)
     {
         GuardNull();
-        if (Subject!.Any())
+        var count = Subject!.Count();
+        if (count > 0)
         {
             MessageFormatter.Fail(
                 "an empty collection",
-                $"a collection with {Subject!.Count()} item(s)",
+                $"a collection with {count} item(s)",
                 Expression, because, becauseArgs);
         }
         return new AndConstraint<GenericCollectionAssertions<T>>(this);

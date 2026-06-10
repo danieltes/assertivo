@@ -427,4 +427,39 @@ public class CollectionAssertionsTests
         Assert.NotNull(ex.Expression);
         Assert.Contains("Expression:", ex.Message);
     }
+
+    // BeEmpty — non-replayable sequence tests
+
+    [Fact]
+    public void BeEmpty_WithNonReplayableSequence_FailsWithCorrectCount()
+    {
+        IEnumerable<int> sequence = new ThrowOnSecondEnumerationSequence<int>(new[] { 1, 2, 3 });
+        var ex = Assert.Throws<AssertionFailedException>(() => sequence.Should().BeEmpty());
+        Assert.Equal("an empty collection", ex.Expected);
+        Assert.Equal("a collection with 3 item(s)", ex.Actual);
+    }
+
+    [Fact]
+    public void BeEmpty_WithNonReplayableEmptySequence_Passes()
+    {
+        IEnumerable<int> sequence = new ThrowOnSecondEnumerationSequence<int>(Array.Empty<int>());
+        sequence.Should().BeEmpty();
+    }
+
+    private sealed class ThrowOnSecondEnumerationSequence<T> : IEnumerable<T>
+    {
+        private readonly T[] _items;
+        private int _enumerationCount;
+
+        public ThrowOnSecondEnumerationSequence(T[] items) => _items = items;
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            if (++_enumerationCount > 1)
+                throw new InvalidOperationException("Sequence cannot be enumerated more than once.");
+            return ((IEnumerable<T>)_items).GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+    }
 }
