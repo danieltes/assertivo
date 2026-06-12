@@ -22,6 +22,18 @@ public static class ShouldExtensions
     public static NumericAssertions<long> Should(this long subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
         => new(subject, caller);
 
+    /// <summary>Returns a <see cref="NumericAssertions{T}"/> for the specified float subject.</summary>
+    public static NumericAssertions<float> Should(this float subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
+        => new(subject, caller);
+
+    /// <summary>Returns a <see cref="NumericAssertions{T}"/> for the specified double subject.</summary>
+    public static NumericAssertions<double> Should(this double subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
+        => new(subject, caller);
+
+    /// <summary>Returns a <see cref="NumericAssertions{T}"/> for the specified decimal subject.</summary>
+    public static NumericAssertions<decimal> Should(this decimal subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
+        => new(subject, caller);
+
     /// <summary>Returns a <see cref="StringAssertions"/> for the specified string subject.</summary>
     public static StringAssertions Should(this string? subject, [CallerArgumentExpression(nameof(subject))] string? caller = null)
         => new(subject, caller);
