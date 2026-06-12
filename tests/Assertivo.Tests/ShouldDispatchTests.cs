@@ -1,6 +1,7 @@
 using Assertivo;
 using Assertivo.Collections;
 using Assertivo.Exceptions;
+using Assertivo.Numeric;
 
 namespace Assertivo.Tests;
 
@@ -282,5 +283,28 @@ public class ShouldDispatchTests
     {
         static async IAsyncEnumerable<int> Source() { yield return 1; }
         Assert.IsType<AsyncEnumerableAssertions<int>>(Source().Should());
+    }
+
+    // ── T016: float / double / decimal dispatch type verification ────────────
+
+    [Fact]
+    public void Should_OnFloat_ReturnsNumericAssertionsFloat()
+    {
+        float subject = 1.5f;
+        Assert.IsType<NumericAssertions<float>>(subject.Should());
+    }
+
+    [Fact]
+    public void Should_OnDouble_ReturnsNumericAssertionsDouble()
+    {
+        double subject = 3.14;
+        Assert.IsType<NumericAssertions<double>>(subject.Should());
+    }
+
+    [Fact]
+    public void Should_OnDecimal_ReturnsNumericAssertionsDecimal()
+    {
+        decimal subject = 9.99m;
+        Assert.IsType<NumericAssertions<decimal>>(subject.Should());
     }
 }
