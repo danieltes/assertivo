@@ -87,4 +87,38 @@ public readonly struct NumericAssertions<T> where T : struct, IComparable<T>, IE
         }
         return new AndConstraint<NumericAssertions<T>>(this);
     }
+
+    /// <summary>
+    /// Asserts that the subject is greater than <paramref name="value"/>.
+    /// </summary>
+    [StackTraceHidden]
+    public AndConstraint<NumericAssertions<T>> BeGreaterThan(T value, IComparer<T>? comparer = null, string because = "", params object[] becauseArgs)
+    {
+        comparer ??= Comparer<T>.Default;
+        if (comparer.Compare(Subject, value) <= 0)
+        {
+            MessageFormatter.Fail(
+                $"a value greater than {MessageFormatter.FormatValue(value)}",
+                MessageFormatter.FormatValue(Subject),
+                Expression, because, becauseArgs);
+        }
+        return new AndConstraint<NumericAssertions<T>>(this);
+    }
+
+    /// <summary>
+    /// Asserts that the subject is less than or equal to <paramref name="value"/>.
+    /// </summary>
+    [StackTraceHidden]
+    public AndConstraint<NumericAssertions<T>> BeLessThanOrEqualTo(T value, IComparer<T>? comparer = null, string because = "", params object[] becauseArgs)
+    {
+        comparer ??= Comparer<T>.Default;
+        if (comparer.Compare(Subject, value) > 0)
+        {
+            MessageFormatter.Fail(
+                $"a value less than or equal to {MessageFormatter.FormatValue(value)}",
+                MessageFormatter.FormatValue(Subject),
+                Expression, because, becauseArgs);
+        }
+        return new AndConstraint<NumericAssertions<T>>(this);
+    }
 }
