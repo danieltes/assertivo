@@ -382,4 +382,124 @@ public class NumericAssertionsTests
     {
         (9.99m).Should().NotBe(0.00m).And.BeLessThan(10.00m);
     }
+
+    // ── T002–T007: BeGreaterThan ──────────────────────────────────────────────
+
+    [Fact]
+    public void BeGreaterThan_WhenGreater_Passes()
+    {
+        5.Should().BeGreaterThan(3);
+    }
+
+    [Fact]
+    public void BeGreaterThan_WhenEqual_Fails()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() => 3.Should().BeGreaterThan(3));
+        Assert.Contains("a value greater than", ex.Expected);
+        Assert.Equal("3", ex.Actual);
+    }
+
+    [Fact]
+    public void BeGreaterThan_WhenLess_Fails()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() => 2.Should().BeGreaterThan(3));
+        Assert.Contains("3", ex.Message);
+        Assert.Contains("2", ex.Message);
+    }
+
+    [Fact]
+    public void BeGreaterThan_WithCustomComparer_UsesComparer()
+    {
+        var reverseComparer = Comparer<int>.Create((a, b) => b.CompareTo(a));
+        Assert.Throws<AssertionFailedException>(() => 5.Should().BeGreaterThan(3, comparer: reverseComparer));
+    }
+
+    [Fact]
+    public void BeGreaterThan_WithNullComparer_FallsBackToDefault()
+    {
+        5.Should().BeGreaterThan(3, comparer: null);
+    }
+
+    [Fact]
+    public void BeGreaterThan_WithBecause_IncludesReasonInMessage()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            2.Should().BeGreaterThan(3, because: "the result must exceed zero"));
+        Assert.Contains("the result must exceed zero", ex.Message);
+    }
+
+    // ── T009–T014: BeLessThanOrEqualTo ───────────────────────────────────────
+
+    [Fact]
+    public void BeLessThanOrEqualTo_WhenLess_Passes()
+    {
+        3.Should().BeLessThanOrEqualTo(5);
+    }
+
+    [Fact]
+    public void BeLessThanOrEqualTo_WhenEqual_Passes()
+    {
+        5.Should().BeLessThanOrEqualTo(5);
+    }
+
+    [Fact]
+    public void BeLessThanOrEqualTo_WhenGreater_Fails()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() => 6.Should().BeLessThanOrEqualTo(5));
+        Assert.Contains("a value less than or equal to", ex.Expected);
+        Assert.Equal("6", ex.Actual);
+    }
+
+    [Fact]
+    public void BeLessThanOrEqualTo_WithCustomComparer_UsesComparer()
+    {
+        var reverseComparer = Comparer<int>.Create((a, b) => b.CompareTo(a));
+        Assert.Throws<AssertionFailedException>(() => 3.Should().BeLessThanOrEqualTo(5, comparer: reverseComparer));
+    }
+
+    [Fact]
+    public void BeLessThanOrEqualTo_WithNullComparer_FallsBackToDefault()
+    {
+        3.Should().BeLessThanOrEqualTo(5, comparer: null);
+    }
+
+    [Fact]
+    public void BeLessThanOrEqualTo_WithBecause_IncludesReasonInMessage()
+    {
+        var ex = Assert.Throws<AssertionFailedException>(() =>
+            6.Should().BeLessThanOrEqualTo(5, because: "the result must not exceed the limit"));
+        Assert.Contains("the result must not exceed the limit", ex.Message);
+    }
+
+    // ── T016: AndConstraint chaining for both new methods ────────────────────
+
+    [Fact]
+    public void BeGreaterThan_ReturnsAndConstraint_AllowingChaining()
+    {
+        42.Should().BeGreaterThan(0).And.BeLessThan(100);
+    }
+
+    [Fact]
+    public void BeLessThanOrEqualTo_ReturnsAndConstraint_AllowingChaining()
+    {
+        42.Should().BeLessThanOrEqualTo(100).And.BeGreaterThan(0);
+    }
+
+    // ── T019–T020: Caller expression capture ─────────────────────────────────
+
+    [Fact]
+    public void BeGreaterThan_FailureMessage_ContainsCallerExpression()
+    {
+        int result = 2;
+        var ex = Assert.Throws<AssertionFailedException>(() => result.Should().BeGreaterThan(3));
+        Assert.Contains("result", ex.Message);
+    }
+
+    [Fact]
+    public void BeLessThanOrEqualTo_FailureMessage_ContainsCallerExpression()
+    {
+        int result = 6;
+        var ex = Assert.Throws<AssertionFailedException>(() => result.Should().BeLessThanOrEqualTo(5));
+        Assert.Contains("result", ex.Message);
+    }
 }

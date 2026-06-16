@@ -31,4 +31,16 @@ public class ShouldBeBenchmarks
 	{
 		_objA.Should().NotBeSameAs(_objB);
 	}
+
+	[Benchmark]
+	public void BeGreaterThan_HappyPath_ZeroAllocation()
+	{
+		_value.Should().BeGreaterThan(0);
+	}
+
+	[Benchmark]
+	public void BeLessThanOrEqualTo_HappyPath_ZeroAllocation()
+	{
+		_value.Should().BeLessThanOrEqualTo(100);
+	}
 }

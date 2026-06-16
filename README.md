@@ -64,8 +64,13 @@ name.Should().NotBe("None");
 ```csharp
 int count = 10;
 count.Should().BeGreaterThanOrEqualTo(5);
+count.Should().BeGreaterThan(0);
 count.Should().BeLessThan(100);
+count.Should().BeLessThanOrEqualTo(10);
 count.Should().NotBe(0);
+
+// Chain comparisons in a single expression
+count.Should().BeGreaterThan(0).And.BeLessThan(100);
 ```
 
 ### Collection assertions
