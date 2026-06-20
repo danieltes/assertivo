@@ -8,6 +8,8 @@ A fluent, strongly-typed assertion library for .NET with a `.Should()` entry-poi
 
 ![Assertivo Logo](assertivo_logo_200x200.png)
 
+> **Disclaimer:** Assertivo is a personal learning/playground project, built to explore .NET library design, AOT compatibility, source-generator-free fluent APIs, and [Spec Kit](https://github.com/github/spec-kit) capabilities. It is not affiliated with or endorsed by any commercial product, and is not recommended for production use without your own due diligence.
+
 ## Installation
 
 ```bash
